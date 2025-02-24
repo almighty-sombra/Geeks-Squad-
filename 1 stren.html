@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sombra The Runner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+        }
+       header {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 00px;
+}
+        .title {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            color: red;
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow: 0 0 40px #000fff;
+        }
+
+        .text {
+            text-align: right;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .odds {
+            text-align: left;
+            font-family: Arial, sans-serif;
+            color: cyan;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #0f0f0f;
+        }
+
+        .win {
+            text-align: left;
+            font-family: Arial, sans-serif;
+            color: blue;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #0f0f0f;
+        }
+
+        .timer {
+            text-align: left;
+            font-family: Arial, sans-serif;
+            color: green;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #0f0f0f;
+        }
+
+        .recent {
+            text-align: left;
+            font-family: Arial, sans-serif;
+            color: cyan;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #0f0f0f;
+        }
+
+        .game-container {
+            width: 85%;
+            margin: 40px auto;
+            text-align: center;
+            background-color: black;
+            position: relative;
+        }
+
+        .game-container h1 {
+            margin-bottom: 20px;
+        }
+
+        .game-container p {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .game-container button {
+            width: 150px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .game-container button:hover {
+            background-color: #3e8e41;
+        }
+
+        .bet-container {
+            margin-top: 20px;
+        }
+
+        .auto-bet-container {
+            margin-top: 20px;
+        }
+
+        .odds-history {
+            margin-top: 20px;
+        }
+
+        .odds-history ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .odds-history li {
+            margin-bottom: 10px;
+        }
+
+        .bet-buttons {
+            text-align: center;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .button-row button {
+            width: 150px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .button-row button:hover {
+            background-color: #3e8e41;
+        }
+
+        .bet-amount {
+            width: 200px;
+            height: 30px;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9
+        }
+         .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+                margin-bottom: 20px;
+            }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            .dropdown:hover .dropdown-button {
+                background-color: #3e8e41;
+            }
+
+            .tip-icon {
+                position: absolute;
+                top: 08px;
+                right: -03px;
+                font-size: 24px;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            .tip-content {
+                display: none;
+                position: absolute;
+                top: 40px;
+                right: 10px;
+                background-color: #fff;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .tip-content h2 {
+                margin-top: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="game-container">
+        <div class="title">Sombra The Runner</div>
+        <p id="balance" class="text">Balance: 5000 FCFA</p>
+        <p id="odds" class="odds">Odds: 1.00</p>
+        <p id="timer" class="timer">Next game in: 5 seconds</p>
+        <div class="bet-container">
+            <p id="potential-win" class="win">Potential Win: 0.00 FCFA</p>
+            <select id="bet-type" class="">
+                <option value="">Select an option</option>
+                <option value="greater">Greater than</option>
+                <option value="lesser">Lesser than</option>
+            </select>
+            <input type="number" id="user-odds" placeholder="How long will sombra run?" class="bet-amount">
+            <input type="number" id="bet-amount" placeholder="Enter bet amount" class="bet-amount">
+            <button id="bet-button">Place Bet</button>
+        </div>
+        <div class="bet-container">
+            <p id="potential-win2" class="win">Potential Win: 0.00 FCFA</p>
+            <select id="bet-type2" class="">
+                <option value="">Select an option</option>
+                <option value="greater">Greater than</option>
+                <option value="lesser">Lesser than</option>
+            </select>
+            <input type="number" id="user-odds2" placeholder="How long will sombra run?" class="bet-amount">
+            <input type="number" id="bet-amount2" placeholder="Enter bet amount" class="bet-amount">
+            <button id="bet-button2">Place Bet</button>
+        </div>
+        <div class="tip-icon" onclick="toggleTip()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+            </svg>
+        </div>     
+            <div class="tip-content" id="tip-content">
+                <h2>How to Play</h2>
+                <p>Welcome to Sombra The Runner! This is a game of chance where you bet on how long Sombra will run.</p>
+                <ol>
+                    <li>Select your bet type: "Greater than" or "Lesser than".</li>
+                    <li>Enter your bet amount.</li>
+                    <li>Enter your predicted odds (how long Sombra will run).</li>
+                    <li>Click "Place Bet" to confirm your bet.</li>
+                    <li>Wait for the game to start and Sombra's run time to be revealed.</li>
+                    <li>If your predicted odds match the actual run time, sombra stop running! Your winnings will be added to your balance.</li>
+                </ol>
+                <h2>Rules and Regulations</h2>
+                <ul>
+                    <li>The minimum bet amount is 1 FCFA.</li>
+                    <li>The maximum bet amount is your current balance.</li>
+                    <li>There is no limits in predicting odds.</li>
+                    <li>Each game lasts for 5 seconds.</li>
+                    <li>You can only place two bet per game.</li>
+                </ul>
+                <h2>How to Win</h2>
+    <p>To win, your predicted odds must meet the following conditions:</p>
+    <ol>
+        <li><strong>Lesser Than Bet:</strong> You win if the Current Odds fall within <strong>50% to 100%</strong> of your predicted odds.
+            <br>Example: If you bet on "Lesser Than" with predicted odds of 10, you win if the Current Odds are between 5 (50% of 10) and 10 (100% of 10).
+        </li>
+        <li><strong>Greater Than Bet:</strong> You win if the Current Odds fall within <strong>100% to 150%</strong> of your predicted odds.
+            <br>Example: If you bet on "Greater Than" with predicted odds of 10, you win if the Current Odds are between 10 (100% of 10) and 15 (150% of 10).
+        </li>
+    </ol>
+    <p>Remember, these conditions must be met for you to receive a payout. Good luck!</p>
+    <p>©SOMBRA</p>
+            </div>
+            <p id="recent-odds" class="recent">Recent Odds: 0.00</p>
+        </div>
+<header>
+    <p>&copy; 2025 Sombra The Runner. All rights reserved.</p>
+</header>
+        <script>
+            let balance = 5000;
+        let currentOdds = 1.00;
+        let potentialWin = 0;
+        let gameId = 0;
+        let currentGameId = 0;
+        let userOdds = 0;
+        let userOdds2 = 0;
+        let betType = '';
+        let betType2 = '';
+        let betAmount = 0;
+        let betAmount2 = 0;
+        let timer = 5;
+        let isGameStarted = false;
+        let endNumber = Math.random() * (100 - 1) + 1;
+        let intervalId;
+        let hasWon = false;
+        const MIN_BET_AMOUNT = 1;
+        const MAX_LESSER_ODDS = 4000000;
+        const ODDS_INCREMENT = 0.01;
+
+        const balanceElement = document.getElementById('balance');
+        const oddsElement = document.getElementById('odds');
+        const potentialWinElement = document.getElementById('potential-win');
+        const potentialWinElement2 = document.getElementById('potential-win2');
+        const timerElement = document.getElementById('timer');
+        const betAmountInput = document.getElementById('bet-amount');
+        const betButton = document.getElementById('bet-button');
+        const betAmountInput2 = document.getElementById('bet-amount2');
+        const betButton2 = document.getElementById('bet-button2');
+        const recentOddsElement = document.getElementById('recent-odds');
+        const betTypeSelect = document.getElementById('bet-type');
+        const userOddsInput = document.getElementById('user-odds');
+        const betTypeSelect2 = document.getElementById('bet-type2');
+        const userOddsInput2 = document.getElementById('user-odds2');
+
+        function updateBalance() {
+            balanceElement.textContent = `Balance: ${balance} FCFA`;
+        }
+
+        function updateOdds() {
+            oddsElement.textContent = `Odds: ${currentOdds.toFixed(2)}x`;
+        }
+        function updatePotentialWin() {
+            if (betAmount > 0) {
+                const userOdds = parseFloat(userOddsInput.value);
+                const potentialWinAmount = betAmount * userOdds;
+                potentialWinElement.textContent = `Potential Win: ${potentialWinAmount.toFixed(2)} FCFA`;
+            } else {
+                potentialWinElement.textContent = `Potential Win: 0.00 FCFA`;
+            }
+        }
+
+        function updatePotentialWin2() {
+            if (betAmount2 > 0) {
+                const userOdds2 = parseFloat(userOddsInput2.value);
+                const potentialWinAmount2 = betAmount2 * userOdds2;
+                potentialWinElement2.textContent = `Potential Win: ${potentialWinAmount2.toFixed(2)} FCFA`;
+            } else {
+                potentialWinElement2.textContent = `Potential Win: 0.00 FCFA`;
+            }
+        }
+
+        function updateTimer() {
+            timerElement.textContent = `Next game in: ${timer} seconds`;
+        }
+
+       function startGame() {
+  gameId++;
+  currentGameId = gameId;
+    isGameStarted = false;
+    timer = 5;
+    updateTimer();
+    intervalId = setInterval(() => {
+        timer--;
+        updateTimer();
+        if (timer === 0) {
+            clearInterval(intervalId);
+            isGameStarted = true;
+            increaseOdds();
+        }
+    }, 1000);
+}
+
+function increaseOdds() {
+  if (isGameStarted) {
+    currentOdds += ODDS_INCREMENT;
+    updateOdds();
+    updatePotentialWin();
+    updatePotentialWin2();
+    recentOddsElement.textContent = `Recent Odds: ${currentOdds.toFixed(2)}x`;
+    if (currentOdds >= 100) {
+      clearInterval(intervalId);
+      alert('Sombra ran away!');
+      restartGame();
+    } else if (currentOdds >= endNumber) {
+      clearInterval(intervalId);
+      hasWon = true;
+      const userOdds = parseFloat(userOddsInput.value);
+      const betType = betTypeSelect.value;
+      const payoutRange = getPayoutRange(userOdds, betType);
+      if (currentOdds >= payoutRange.min && currentOdds <= payoutRange.max) {
+        balance += betAmount * userOdds;
+        updateBalance();
+        alert('sombra stop running!');
+      } else {
+        alert('sombra ran away!');
+      }
+      restartGame();
+    } else {
+      setTimeout(increaseOdds, 03);
+    }
+  }
+}
+function getPayoutRange(userOdds, betType) {
+    let min, max;
+    if (betType === 'lesser') {
+        min = userOdds * 0.5;
+        max = userOdds;
+    } else if (betType === 'greater') {
+        min = userOdds;
+        max = userOdds * 1.5;
+    }
+    return { min, max };
+}
+function resetUserInput() {
+  betAmountInput.value = '';
+  betAmountInput2.value = '';
+  userOddsInput.value = '';
+  userOddsInput2.value = '';
+  betTypeSelect.value = '';
+  betTypeSelect2.value = '';
+}
+
+function restartGame() {
+  // Reset internal state
+  currentOdds = 1.00;
+  endNumber = Math.random() * (100 - 1) + 1;
+  endNumber2 = Math.random() * (100 - 1) + 1;
+  updateOdds();
+  updatePotentialWin();
+  updatePotentialWin2();
+  betAmount = 0;
+  betAmount2 = 0;
+  
+  // Keep user's input and selection
+  const betAmountInputValue = betAmountInput.value;
+  const betAmountInputValue2 = betAmountInput2.value;
+  const userOddsInputValue = userOddsInput.value;
+  const userOddsInputValue2 = userOddsInput2.value;
+  const betTypeSelectValue = betTypeSelect.value;
+  const betTypeSelectValue2 = betTypeSelect2.value;
+  
+  // Reset user's input and selection temporarily
+  betAmountInput.value = '';
+  betAmountInput2.value = '';
+  userOddsInput.value = '';
+  userOddsInput2.value = '';
+  betTypeSelect.value = '';
+  betTypeSelect2.value = '';
+  
+  // Restore user's input and selection
+  setTimeout(() => {
+    betAmountInput.value = betAmountInputValue;
+    betAmountInput2.value = betAmountInputValue2;
+    userOddsInput.value = userOddsInputValue;
+    userOddsInput2.value = userOddsInputValue2;
+    betTypeSelect.value = betTypeSelectValue;
+    betTypeSelect2.value = betTypeSelectValue2;
+  }, 0);
+  
+  startGame();
+}
+
+        function toggleTip() {
+            const tipContent = document.getElementById('tip-content');
+            tipContent.style.display = tipContent.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function handleBetButton() {
+  if (currentGameId !== gameId) {
+    alert('You cannot bet on a previous game!');
+    return;
+  }
+  if (timer > 0 && !isGameStarted) {
+    const betType = betTypeSelect.value;
+    betAmount = parseFloat(betAmountInput.value);
+    const userOdds = parseFloat(userOddsInput.value);
+    if (isNaN(betAmount) || betAmount <= 0) {
+      alert('Invalid bet amount. Please enter a positive number.');
+      return;
+    }
+    if (betAmount > balance) {
+      alert('Insufficient balance.');
+      return;
+    }
+    if (userOdds <= 0) {
+      alert('Invalid odds. Please enter a positive number.');
+      return;
+    }
+    if (betType === 'lesser' && (userOdds < 1 || userOdds > MAX_LESSER_ODDS)) {
+      alert('Invalid odds for "lesser than". Please enter a value between 1 and ' + MAX_LESSER_ODDS + '.');
+      return;
+    }
+    balance -= betAmount;
+    updateBalance();
+    updatePotentialWin();
+  } else {
+    alert('Game has already started. Please wait for the next turn!');
+  }
+}
+
+       function handleBetButton2() {
+  if (currentGameId !== gameId) {
+    alert('You cannot bet on a previous game!');
+    return;
+  }
+  if (timer > 0 && !isGameStarted) {
+    const betType2 = betTypeSelect2.value;
+    betAmount2 = parseFloat(betAmountInput2.value);
+    const userOdds2 = parseFloat(userOddsInput2.value);
+    if (isNaN(betAmount2) || betAmount2 <= 0) {
+      alert('Invalid bet amount. Please enter a positive number.');
+      return;
+    }
+     if (betAmount2 > balance) {
+      alert('Insufficient balance.');
+      return;
+    }
+  if (userOdds2 <= 0) {
+    alert('Invalid odds. Please enter a positive number.');
+    return;
+  }
+  if (betType2 === 'lesser' && (userOdds2 < 1 || userOdds2 > MAX_LESSER_ODDS)) {
+    alert('Invalid odds for "lesser than". Please enter a value between 1 and ' + MAX_LESSER_ODDS + '.');
+    return;
+  }
+  balance -= betAmount2;
+  updateBalance();
+  updatePotentialWin2();
+} else {
+  alert('Game has already started. Please wait for the next game!');
+}
+}
+
+betButton.addEventListener('click', handleBetButton);
+betButton2.addEventListener('click', handleBetButton2);
+
+startGame();
+        </script>
+    </body>
+</html>
